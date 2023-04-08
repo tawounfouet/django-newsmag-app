@@ -3,8 +3,18 @@ from main.models import Main
 
 # Create your views here.
 
+
 def home(request):
-    return render(request, 'front/home.html')
+    # sitename = 'News Mag | Home'
+    # site = Main.objects.filter(pk=1)
+    site = Main.objects.get(pk=1)
+    # sitename = site.title + ' | Home'
+
+    return render(request, 'front/home.html', {'site': site})
+
 
 def about(request):
-    return render(request, 'front/about.html')
+    # sitename = site.title + ' | About'
+    site = Main.objects.get(pk=1)
+
+    return render(request, 'front/about.html', {'site': site})
