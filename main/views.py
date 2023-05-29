@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from main.models import Main
+from news.models import News
 
 # Create your views here.
 
@@ -9,8 +10,9 @@ def home(request):
     # site = Main.objects.filter(pk=1)
     site = Main.objects.get(pk=1)
     # sitename = site.title + ' | Home'
+    news = News.objects.all()
 
-    return render(request, 'front/home.html', {'site': site})
+    return render(request, 'front/home.html', {'site': site, 'news': news})
 
 
 def about(request):
