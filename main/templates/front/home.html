@@ -554,7 +554,8 @@
                 <div class="m-b-45">
                     <!-- <a href="#" class="wrap-pic-w hov1 trans-03">   -->
                     <a href="{% url 'news_detail' pk=i.pk %}" class="wrap-pic-w hov1 trans-03">
-                        <img src="{% static 'front/images/latest-01.jpg' %}" alt="IMG">
+                        <img src="{{ i.image_url }}" alt="IMG">
+                        {% comment %} <img src="{ static 'front/images/latest-01.jpg' }" alt="IMG"> {% endcomment %}
                     </a>
 
                     <div class="p-t-16">

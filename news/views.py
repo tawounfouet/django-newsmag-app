@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from news.models import News
 from main.models import Main
+from django.core.files.storage import FileSystemStorage
 
 # Create your views here.
 
@@ -33,11 +34,28 @@ def news_add(request):
             error = "Please fill all fields"
             return render(request, 'back/error.html', {'error': error, 'site': site})
         
-        b = News(title=newstitle, short_description=newstextshort, body=newstext,  category_id=1,
-                  author='admin', date='2019-01-01 00:00:00', show=True)
-        b.save()
-        return redirect('news_list')
- 
+        try:
+            myfile = request.FILES['myfile']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)   
+
+            if str(myfile.content_type).startswith('image'):
+
+                if myfile.size < 5000000:
+                    b = News(title=newstitle, short_description=newstextshort, body=newstext,  category_id=1,
+                            author='admin', date='2019-01-01 00:00:00', show=0, image=filename, image_url=uploaded_file_url)
+                    b.save()
+                    return redirect('news_list')
+                else:
+                    error = "Your Image is bigger than 5MB, please upload smaller image"
+                    return render(request, 'back/error.html', {'error': error, 'site': site})
+            else:
+                error = "Your File Not Supported"
+                return render(request, 'back/error.html', {'error': error, 'site': site})
+        except:
+            error = "Please input your image"
+            return render(request, 'back/error.html', {'error': error, 'site': site})
 
        
         # title = request.POST['title']
@@ -46,6 +64,6 @@ def news_add(request):
         # image = request.FILES['image']
         # news = News(title=title, content=content, author=author, image=image)
         # news.save()
-        return redirect('news_list')
+        #return redirect('news_list')
 
     return render(request, 'back/news_add.html', {'site': site})
