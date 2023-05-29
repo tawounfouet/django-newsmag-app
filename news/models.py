@@ -11,7 +11,9 @@ class News(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     image = models.ImageField(upload_to='images/', blank=True, null=True)
     author = models.CharField(max_length=100, default='admin')
-   
+    category = models.CharField(max_length=100, default='-')
+    category_id = models.IntegerField(default=1)
+    show = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
