@@ -64,9 +64,15 @@ def news_add(request):
                     b.save()
                     return redirect('news_list')
                 else:
+                    fs = FileSystemStorage()
+                    fs.delete(filename)
+                    
                     error = "Your Image is bigger than 5MB, please upload smaller image"
                     return render(request, 'back/error.html', {'error': error, 'site': site})
             else:
+                fs = FileSystemStorage()
+                fs.delete(filename)
+
                 error = "Your File Not Supported"
                 return render(request, 'back/error.html', {'error': error, 'site': site})
         except:
@@ -83,3 +89,23 @@ def news_add(request):
         #return redirect('news_list')
 
     return render(request, 'back/news_add.html', {'site': site})
+
+
+def news_delete(request, pk):
+    site = Main.objects.get(pk=1)
+    #news = get_object_or_404(News, pk=pk)
+    #news.delete()
+    #b = News.objects.filter(pk=pk)
+
+    try:
+        b = News.objects.get(pk=pk)
+
+        # fs = FileSystemStorage()
+        # fs.delete(b.image)
+
+        b.delete()
+    except:
+        error = "Something went wrong"
+        return render(request, 'back/error.html', {'error': error, 'site': site})
+
+    return redirect('news_list')
