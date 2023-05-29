@@ -20,3 +20,9 @@ def about(request):
     site = Main.objects.get(pk=1)
 
     return render(request, 'front/about.html', {'site': site})
+
+def panel(request):
+    # sitename = site.title + ' | About'
+    site = Main.objects.get(pk=1)
+
+    return render(request, 'back/panel.html', {'site': site})

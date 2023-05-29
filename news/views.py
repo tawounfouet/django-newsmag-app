@@ -12,3 +12,9 @@ def news_detail(request, pk):
     return render(request, 'front/news_detail.html', {'news': news, 'site': site})
 
 
+def news_list(request):
+    news = News.objects.all()
+    site = Main.objects.get(pk=1)
+    return render(request, 'back/news_list.html', {'news': news, 'site': site})
+
+
