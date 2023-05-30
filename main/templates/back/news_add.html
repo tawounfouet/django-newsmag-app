@@ -1,5 +1,14 @@
-{% extends 'back/base.html' %} {% load static %} {% block mainblock %}
+{% extends 'back/base.html' %} 
+{% load static %} 
 
+{% block headerblock %}
+    <script src="{% static 'ckeditor/ckeditor.js' %}"></script>
+            
+{% endblock %}
+
+
+
+{% block mainblock %}
 
   <!-- Datatables Header -->
   <div class="content-header">
@@ -61,9 +70,14 @@
 
                                 <div class="form-group">
                                     <div class="col-md-12">
-                                        <textarea type="text" id="newstext" name="newstext" row="20" class="form-control" placeholder="Body text"></textarea>
+                                        <textarea type="text" id="newstext" name="newstext" row="20" class="form-control" placeholder="Body text">Body Text</textarea>
                                     </div>
                                 </div> 
+                                
+                                <script>
+                                    CKEDITOR.replace( 'newstext' );
+                                </script>
+
 
                                 <div class="form-group">
                                     <div class="col-md-6">

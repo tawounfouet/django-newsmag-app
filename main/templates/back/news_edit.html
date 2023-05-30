@@ -1,6 +1,13 @@
-{% extends 'back/base.html' %} {% load static %} {% block mainblock %}
+{% extends 'back/base.html' %} 
+{% load static %} 
+
+{% block headerblock %}
+    <script src="{% static 'ckeditor/ckeditor.js' %}"></script>
+            
+{% endblock %}
 
 
+{% block mainblock %}
   <!-- Datatables Header -->
   <div class="content-header">
     <div class="header-section">
@@ -68,6 +75,10 @@
                                         </textarea>
                                     </div>
                                 </div> 
+                                # adding ckeditor to the textarea
+                                <script>
+                                    CKEDITOR.replace( 'newstext' );
+                                </script>
 
                                 <div class="form-group">
                                     <div class="col-md-6">
