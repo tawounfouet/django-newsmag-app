@@ -3,6 +3,7 @@ from news.models import News
 from main.models import Main
 from django.core.files.storage import FileSystemStorage
 import datetime
+from subcategory.models import SubCategory
 
 # Create your views here.
 
@@ -11,6 +12,9 @@ def news_detail(request, pk):
     news = News.objects.filter(pk=pk)
     site = Main.objects.get(pk=1)
     #news = get_object_or_404(News, pk=pk)
+
+
+
     return render(request, 'front/news_detail.html', {'news': news, 'site': site})
 
 
@@ -37,19 +41,34 @@ def news_add(request):
     time = str(now.hour) + ":" + str(now.minute) + ":" + str(now.second)
 
 
+    categories = SubCategory.objects.all()
 
     if request.method == 'POST':
 
         newstitle = request.POST.get('newstitle')
-        #newscat = request.POST.get('newscat')
+        newscat = request.POST.get('newscat')
         newstextshort = request.POST.get('newstextshort')
         newstext = request.POST.get('newstext')
+        newsid = request.POST.get('newscat')
     
 
-        if newstitle == "" or newstextshort == "" or newstext == "":
+        if newstitle == "" or newstextshort == "" or newstext == "" or newscat == "":
             error = "Please fill all fields"
             return render(request, 'back/error.html', {'error': error, 'site': site})
         
+        # else:
+        #     myfile = request.FILES['myfile']
+        #     fs = FileSystemStorage()
+        #     filename = fs.save(myfile.name, myfile)
+        #     uploaded_file_url = fs.url(filename)
+
+        #     newsname = SubCategory.objects.get(pk=newsid).name 
+
+        #     b = News(title=newstitle, short_description=newstextshort, body=newstext, category=newsname, category_id=newsid,
+        #                     author='admin', date=today, time=time, show=0, image=filename, image_url=uploaded_file_url)
+        #     b.save()
+        #     return redirect('news_list')
+
         try:
             myfile = request.FILES['myfile']
             fs = FileSystemStorage()
@@ -59,7 +78,10 @@ def news_add(request):
             if str(myfile.content_type).startswith('image'):
 
                 if myfile.size < 5000000:
-                    b = News(title=newstitle, short_description=newstextshort, body=newstext,  category_id=1,
+
+                    newsname = SubCategory.objects.get(pk=newsid).name
+
+                    b = News(title=newstitle, short_description=newstextshort, body=newstext, category=newsname, category_id=newsid,
                             author='admin', date=today, time=time, show=0, image=filename, image_url=uploaded_file_url)
                     b.save()
                     return redirect('news_list')
@@ -78,17 +100,11 @@ def news_add(request):
         except:
             error = "Please input your image"
             return render(request, 'back/error.html', {'error': error, 'site': site})
+         
 
-       
-        # title = request.POST['title']
-        # content = request.POST['content']
-        # author = request.POST['author']
-        # image = request.FILES['image']
-        # news = News(title=title, content=content, author=author, image=image)
-        # news.save()
-        #return redirect('news_list')
+   
 
-    return render(request, 'back/news_add.html', {'site': site})
+    return render(request, 'back/news_add.html', {'site': site, 'categories': categories})
 
 
 def news_delete(request, pk):
