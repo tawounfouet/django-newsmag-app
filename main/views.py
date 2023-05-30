@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from main.models import Main
 from news.models import News
 from category.models import Category
+from subcategory.models import SubCategory
 
 # Create your views here.
 
@@ -13,8 +14,9 @@ def home(request):
     # sitename = site.title + ' | Home'
     news = News.objects.all().order_by('-pk')
     categories = Category.objects.all()
+    subcategories = SubCategory.objects.all()
 
-    return render(request, 'front/home.html', {'site':site, 'news':news, 'categories':categories})
+    return render(request, 'front/home.html', {'site':site, 'news':news, 'categories':categories, 'subcategories':subcategories})
 
 
 def about(request):
