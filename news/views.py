@@ -55,20 +55,7 @@ def news_add(request):
         if newstitle == "" or newstextshort == "" or newstext == "" or newscat == "":
             error = "Please fill all fields"
             return render(request, 'back/error.html', {'error': error, 'site': site})
-        
-        # else:
-        #     myfile = request.FILES['myfile']
-        #     fs = FileSystemStorage()
-        #     filename = fs.save(myfile.name, myfile)
-        #     uploaded_file_url = fs.url(filename)
-
-        #     newsname = SubCategory.objects.get(pk=newsid).name 
-
-        #     b = News(title=newstitle, short_description=newstextshort, body=newstext, category=newsname, category_id=newsid,
-        #                     author='admin', date=today, time=time, show=0, image=filename, image_url=uploaded_file_url)
-        #     b.save()
-        #     return redirect('news_list')
-
+    
         try:
             myfile = request.FILES['myfile']
             fs = FileSystemStorage()
@@ -102,8 +89,6 @@ def news_add(request):
             return render(request, 'back/error.html', {'error': error, 'site': site})
          
 
-   
-
     return render(request, 'back/news_add.html', {'site': site, 'categories': categories})
 
 
@@ -125,3 +110,85 @@ def news_delete(request, pk):
         return render(request, 'back/error.html', {'error': error, 'site': site})
 
     return redirect('news_list')
+
+
+
+def news_edit(request, pk):
+
+    if len(News.objects.filter(pk=pk)) == 0:
+        error = "News Not Found"
+        return render(request, 'back/error.html', {'error': error})
+
+    site = Main.objects.get(pk=1)
+    news = News.objects.get(pk=pk)
+    categories = SubCategory.objects.all()
+
+    if request.method == 'POST':
+
+        newstitle = request.POST.get('newstitle')
+        newscat = request.POST.get('newscat')
+        newstextshort = request.POST.get('newstextshort')
+        newstext = request.POST.get('newstext')
+        newsid = request.POST.get('newscat')
+    
+
+        if newstitle == "" or newstextshort == "" or newstext == "" or newscat == "":
+            error = "Please fill all fields"
+            return render(request, 'back/error.html', {'error': error, 'site': site})
+    
+        try:
+            myfile = request.FILES['myfile']
+            fs = FileSystemStorage()
+            filename = fs.save(myfile.name, myfile)
+            uploaded_file_url = fs.url(filename)   
+
+            if str(myfile.content_type).startswith('image'):
+
+                if myfile.size < 5000000:
+
+                    newsname = SubCategory.objects.get(pk=newsid).name
+
+                    b = News.objects.get(pk=pk)
+                    
+                    # fss = FileSystemStorage()
+                    # fss.delete(filename)
+
+                    b.title = newstitle
+                    b.short_description = newstextshort
+                    b.body = newstext
+                    b.category = newsname
+                    b.category_id = newsid
+                    b.image = filename
+                    b.image_url = uploaded_file_url
+
+                    b.save()
+
+                    return redirect('news_list')
+                else:
+                    fs = FileSystemStorage()
+                    fs.delete(filename)
+                    
+                    error = "Your Image is bigger than 5MB, please upload smaller image"
+                    return render(request, 'back/error.html', {'error': error, 'site': site})
+            else:
+                fs = FileSystemStorage()
+                fs.delete(filename)
+
+                error = "Your File Not Supported"
+                return render(request, 'back/error.html', {'error': error, 'site': site})
+        except:
+            newsname = SubCategory.objects.get(pk=newsid).name
+
+            b = News.objects.get(pk=pk)
+                            
+            b.title = newstitle
+            b.short_description = newstextshort
+            b.body = newstext
+            b.category = newsname
+            b.category_id = newsid
+  
+            b.save()
+
+            return redirect('news_list')
+
+    return render(request, 'back/news_edit.html', {'site': site, 'pk': pk, 'news': news, 'categories': categories})
