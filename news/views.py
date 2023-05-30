@@ -4,6 +4,7 @@ from main.models import Main
 from django.core.files.storage import FileSystemStorage
 import datetime
 from subcategory.models import SubCategory
+from category.models import Category
 
 # Create your views here.
 
@@ -67,10 +68,19 @@ def news_add(request):
                 if myfile.size < 5000000:
 
                     newsname = SubCategory.objects.get(pk=newsid).name
+                    ocategory_id = SubCategory.objects.get(pk=newsid).category_id
 
-                    b = News(title=newstitle, short_description=newstextshort, body=newstext, category=newsname, category_id=newsid,
+                    b = News(title=newstitle, short_description=newstextshort, body=newstext, category=newsname,
+                              category_id=newsid, ocategory_id=ocategory_id,
                             author='admin', date=today, time=time, show=0, image=filename, image_url=uploaded_file_url)
                     b.save()
+
+                    count = len(News.objects.filter(ocategory_id=ocategory_id))
+
+                    b = Category.objects.get(pk=ocategory_id)
+                    b.count = count
+                    b.save()
+
                     return redirect('news_list')
                 else:
                     fs = FileSystemStorage()
@@ -104,7 +114,17 @@ def news_delete(request, pk):
         # fs = FileSystemStorage()
         # fs.delete(b.image)
 
+        ocategory_id = News.objects.get(pk=pk).ocategory_id
+
         b.delete()
+        
+        count = len(News.objects.filter(ocategory_id=ocategory_id))
+
+        m = Category.objects.get(pk=ocategory_id)
+        m.count = count
+        m.save()
+
+       
     except:
         error = "Something went wrong"
         return render(request, 'back/error.html', {'error': error, 'site': site})

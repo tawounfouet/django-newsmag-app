@@ -16,6 +16,8 @@ class News(models.Model):
     author = models.CharField(max_length=100, default='admin')
     category = models.CharField(max_length=100, default='-')
     category_id = models.IntegerField(default=1)
+    ocategory_id = models.IntegerField(default=1)
+    
     show = models.IntegerField(default=0)
 
     def __str__(self):
