@@ -10,5 +10,6 @@ urlpatterns = [
     path('panel/', views.panel, name='panel'),
     path('login/', views.mylogin, name='mylogin'),
     path('logout/', views.mylogout, name='mylogout'),
+    path('panel/setting/', views.site_setting, name='site_setting'),
    
 ]

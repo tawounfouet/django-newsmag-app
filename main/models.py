@@ -15,6 +15,9 @@ class Main(models.Model):
     linkedin = models.CharField(max_length=200, default='https://www.linkedin.com/')
     github = models.CharField(max_length=200, default='https://github.com/')
 
+    image_url = models.TextField(default='image_url')
+    image_name = models.TextField(default='image_name')
+
     tel = models.CharField(max_length=200, default='tel:123456789')
     email = models.CharField(max_length=200, default='mailto:john.doe@example.com')
     link = models.CharField(max_length=200, default='https://example.com/')
