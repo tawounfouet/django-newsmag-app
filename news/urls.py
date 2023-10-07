@@ -12,4 +12,5 @@ urlpatterns = [
     path('panel/news/add/', views.news_add, name='news_add'),
     path('panel/news/edit/<str:pk>/', views.news_edit, name='news_edit'),
     path('panel/news/delete/<str:pk>/', views.news_delete, name='news_delete'),
+    
 ]

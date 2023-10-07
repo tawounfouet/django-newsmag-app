@@ -20,12 +20,24 @@ def news_detail(request, pk):
 
 
 def news_list(request):
+
+    # login check start
+    if not request.user.is_authenticated:
+        return redirect('mylogin')
+    # login check start
+
     news = News.objects.all()
     site = Main.objects.get(pk=1)
     return render(request, 'back/news_list.html', {'news': news, 'site': site})
 
 
 def news_add(request):
+
+    # login check start
+    if not request.user.is_authenticated:
+        return redirect('mylogin')
+    # login check start
+
     site = Main.objects.get(pk=1)
 
     now = datetime.datetime.now()
@@ -103,6 +115,12 @@ def news_add(request):
 
 
 def news_delete(request, pk):
+
+    # login check start
+    if not request.user.is_authenticated:
+        return redirect('mylogin')
+    # login check start
+
     site = Main.objects.get(pk=1)
     #news = get_object_or_404(News, pk=pk)
     #news.delete()
@@ -134,6 +152,11 @@ def news_delete(request, pk):
 
 
 def news_edit(request, pk):
+
+    # login check start
+    if not request.user.is_authenticated:
+        return redirect('mylogin')
+    # login check start
 
     if len(News.objects.filter(pk=pk)) == 0:
         error = "News Not Found"

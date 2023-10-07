@@ -4,12 +4,23 @@ from category.models import Category
 # Create your views here.
 
 def category_list(request):
+
+    # login check start
+    if not request.user.is_authenticated:
+        return redirect('mylogin')
+    # login check start
+
     categories = Category.objects.all()
 
     return render(request, 'back/category_list.html', {'categories': categories})
 
 
 def category_add(request):
+
+    # login check start
+    if not request.user.is_authenticated:
+        return redirect('mylogin')
+    # login check start
 
     if request.method == 'POST':
         name = request.POST.get('name')

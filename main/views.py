@@ -25,8 +25,39 @@ def about(request):
 
     return render(request, 'front/about.html', {'site': site})
 
-def panel(request):
-    # sitename = site.title + ' | About'
-    site = Main.objects.get(pk=1)
+from django.contrib.auth.decorators import login_required
 
-    return render(request, 'back/panel.html', {'site': site})
+#@login_required
+def panel(request):
+
+    # login check start
+    if not request.user.is_authenticated:
+        return redirect('mylogin')
+    # login check start
+
+    return render(request, 'back/panel.html')
+
+
+from django.contrib.auth import authenticate, login, logout
+def mylogin(request):
+    
+    if request.method == 'POST':
+        
+        username = request.POST['username']
+        password = request.POST['password']
+
+        if username != '' or password != '':
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                login(request, user)
+                return redirect('panel')
+                
+    return render(request, 'front/login.html')
+
+
+def mylogout(request):
+
+    logout(request)
+    
+    return redirect("mylogin")

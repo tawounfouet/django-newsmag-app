@@ -5,12 +5,23 @@ from category.models import Category
 # Create your views here.
 
 def subcategory_list(request):
+
+    # login check start
+    if not request.user.is_authenticated:
+        return redirect('mylogin')
+    # login check start
+
     subcategories = SubCategory.objects.all()
 
     return render(request, 'back/subcategory_list.html', {'subcategories': subcategories})
 
 
 def subcategory_add(request):
+
+    # login check start
+    if not request.user.is_authenticated:
+        return redirect('mylogin')
+    # login check start
 
     categories = Category.objects.all()
 
